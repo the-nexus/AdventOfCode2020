@@ -2,8 +2,8 @@
 #include "Generated/GeneratedDefinitions.h"
 
 // EDIT HERE! These lines will change what is executed
-#define CHALLENGE_TYPE CChallenge_N
-#define IS_FIRST_PART true
+#define CHALLENGE_TYPE CChallenge_01
+#define IS_FIRST_PART false
 
 
 

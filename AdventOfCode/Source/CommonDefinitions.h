@@ -1,7 +1,9 @@
 #pragma once
 
-#include <string>
+#include <algorithm>
 #include <iostream>
+#include <string>
+#include <vector>
 
 enum class EErrorCode
 {
