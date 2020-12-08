@@ -146,6 +146,7 @@
     <ClCompile Include="Source\Challenges\Challenge_04.cpp"/>
     <ClCompile Include="Source\Challenges\Challenge_05.cpp"/>
     <ClCompile Include="Source\Challenges\Challenge_06.cpp"/>
+    <ClCompile Include="Source\Challenges\Challenge_07.cpp"/>
     <ClCompile Include="Source\Challenges\Challenge_N.cpp"/>
     <ClCompile Include="Source\Challenges\Common\Challenge.cpp"/>
     <ClCompile Include="Source\Helpers\FileHelpers.cpp"/>
@@ -157,11 +158,13 @@
     <ClInclude Include="Source\Challenges\Challenge_04.h"/>
     <ClInclude Include="Source\Challenges\Challenge_05.h"/>
     <ClInclude Include="Source\Challenges\Challenge_06.h"/>
+    <ClInclude Include="Source\Challenges\Challenge_07.h"/>
     <ClInclude Include="Source\Challenges\Challenge_N.h"/>
     <ClInclude Include="Source\Challenges\Common\Challenge.h"/>
     <ClInclude Include="Source\CommonDefinitions.h"/>
     <ClInclude Include="Source\Generated\GeneratedDefinitions.h"/>
     <ClInclude Include="Source\Helpers\FileHelpers.h"/>
+    <ClInclude Include="Source\Utilities\NodeGraph.h"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
