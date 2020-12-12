@@ -21,9 +21,10 @@ EErrorCode CChallenge_10::Run_FirstPart()
     m_adapterDifferenceMap.insert(std::pair<int, int>(2, 0));
     m_adapterDifferenceMap.insert(std::pair<int, int>(3, 0));
 
-    int lastAdapterJolts = 0;
-    for (int const adapterJolts : m_adapters)
+    int lastAdapterJolts = m_adapters[0];
+    for (size_t adapterIdx = 1; adapterIdx < m_adapters.size(); ++adapterIdx)
     {
+        int const adapterJolts = m_adapters[adapterIdx];
         ++m_adapterDifferenceMap[adapterJolts - lastAdapterJolts];
         lastAdapterJolts = adapterJolts;
     }
@@ -49,24 +50,38 @@ EErrorCode CChallenge_10::SetUp_SecondPart()
 
 EErrorCode CChallenge_10::Run_SecondPart()
 {
-    //std::vector<int> m_combinationPossibilities;
-    //m_combinationPossibilities.resize(m_adapters.size());
+    std::vector<long long> paths;
+    paths.resize(m_adapters.size());
+    paths.back() = 1;
 
-    //for (size_t adapterIdx = 0; adapterIdx < m_adapters.size(); ++adapterIdx)
-    //{
-    //    size_t const adapterReverseIdx = m_adapters.size() - adapterIdx - 1;
+    for (size_t adapterIdx = 0; adapterIdx < m_adapters.size() - 1; ++adapterIdx)
+    {
+        size_t const reverseAdjustedIdx = m_adapters.size() - adapterIdx - 2;
+        paths[reverseAdjustedIdx] = 0;
 
-    //    int const combinations = 1;
-    //    size_t nextAdapterIdx = adapterReverseIdx - 1;
-    //    while ()
-    //}
+        size_t nextAdapterIdx = reverseAdjustedIdx + 1;
+        while (nextAdapterIdx < m_adapters.size())
+        {
+            int const joltDiff = m_adapters[nextAdapterIdx] - m_adapters[reverseAdjustedIdx];
+            if (joltDiff <= 3)
+            {
+                paths[reverseAdjustedIdx] += paths[nextAdapterIdx];
+            }
+            else
+            {
+                break;
+            }
+            ++nextAdapterIdx;
+        }
+    }
 
-    return EErrorCode::NotImplemented;
+    std::cout << "Paths = " << paths[0] << std::endl;
+    return EErrorCode::Success;
 }
 
 EErrorCode CChallenge_10::CleanUp_SecondPart()
 {
-    return EErrorCode::NotImplemented;
+    return EErrorCode::Success;
 }
 
 
@@ -81,7 +96,9 @@ EErrorCode CChallenge_10::LoadAdapters()
         return readErrorCode;
     }
 
-    m_adapters.reserve(lines.size() + 1);
+    m_adapters.reserve(lines.size() + 2);
+    m_adapters.push_back(0);
+
     for (std::string const& line : lines)
     {
         int const adapterJolts = atoi(line.c_str());
