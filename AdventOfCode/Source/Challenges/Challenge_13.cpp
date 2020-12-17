@@ -52,36 +52,51 @@ EErrorCode CChallenge_13::SetUp_SecondPart()
 
 EErrorCode CChallenge_13::Run_SecondPart()
 {
-    size_t highestBustTimeIdx = 0;
-    unsigned long long highestBusTime = 0;
+    std::vector<unsigned long long> smallModulos;
+    std::vector<unsigned long long> leftovers;
+    unsigned long long biggestModulo = 1;
 
     for (size_t busTimeIdx = 0; busTimeIdx < m_busTimes.size(); ++busTimeIdx)
     {
-        if (m_busTimes[busTimeIdx] > highestBusTime)
+        unsigned long long const busTime = m_busTimes[busTimeIdx];
+        if (busTime > 0)
         {
-            highestBusTime = m_busTimes[busTimeIdx];
-            highestBustTimeIdx = busTimeIdx;
+            unsigned long long adjustedBusTime = busTime;
+            while (adjustedBusTime < busTimeIdx)
+            {
+                adjustedBusTime += busTime;
+            }
+
+            smallModulos.push_back(busTime);
+            leftovers.push_back(adjustedBusTime - busTimeIdx);
+            biggestModulo *= busTime;
         }
     }
 
-    unsigned long long const minTime = 100000000000000;
-    unsigned long long const firstTimeAfterMinTime = minTime - (minTime % highestBusTime) + highestBusTime;
+    std::vector<unsigned long long> bigModulos;
+    std::vector<unsigned long long> multipliers;
+    bigModulos.resize(smallModulos.size());
+    multipliers.resize(smallModulos.size());
 
-    std::cout << "FirstTimeAfterMinTime = " << firstTimeAfterMinTime << std::endl;
-    std::cout << "Mod of FirstTimeAfterMinTime = " << (firstTimeAfterMinTime % highestBusTime) << std::endl;
-
-    unsigned long long currentTime = firstTimeAfterMinTime - highestBustTimeIdx;
-    while (!FindConsecutiveBusTimes(currentTime, 0))
+    for (size_t moduloIdx = 0; moduloIdx < smallModulos.size(); ++moduloIdx)
     {
-        if (static_cast<unsigned long long>(-1) - currentTime < highestBusTime)
+        bigModulos[moduloIdx] = biggestModulo / smallModulos[moduloIdx];
+
+        multipliers[moduloIdx] = 1;
+        while ((multipliers[moduloIdx] * bigModulos[moduloIdx]) % smallModulos[moduloIdx] != 1)
         {
-            std::cout << "ERROR! Busted the limit of an 'unsigned long long'" << std::endl;
-            return EErrorCode::Undefined;
+            ++multipliers[moduloIdx];
         }
-        currentTime += highestBusTime;
     }
 
-    std::cout << "Consecutive bus time = " << currentTime << std::endl;
+    unsigned long long targetSum = 0;
+    for (size_t moduloIdx = 0; moduloIdx < smallModulos.size(); ++moduloIdx)
+    {
+        targetSum += leftovers[moduloIdx] * bigModulos[moduloIdx] * multipliers[moduloIdx];
+    }
+
+    unsigned long long const targetTime = targetSum % biggestModulo;
+    std::cout << "Consecutive bus time = " << targetTime << std::endl;
     return EErrorCode::Success;
 }
 
